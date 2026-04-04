@@ -1,29 +1,82 @@
-# Command Center README
+# Command Center
 
-## Introduction
-The Command Center is a dashboard for managing and tracking progress on projects. It provides a centralized location for storing and viewing information related to projects, including decisions, notes, and task lists.
+A live dashboard that visualizes the agent's workspace state, memory integrity, project progress, and task completion metrics.
 
-## Getting Started
-To get started with the Command Center, follow these steps:
-1. Clone the repository to your local machine using `git clone https://github.com/DatHotFiyah/Project-Command-Center.git`
-2. Open the `workspace/dashboard` directory in your web browser to view the dashboard
-3. Explore the different sections of the dashboard, including the project list, task list, and notes
+## Overview
 
-## Using the Command Center
-The Command Center is designed to be easy to use and navigate. Here are some tips for getting the most out of the dashboard:
-* Use the project list to view and manage your projects
-* Use the task list to view and manage your tasks
-* Use the notes section to store and view notes related to your projects
-* Use the search function to quickly find specific information
+The Command Center is not a standalone app — it's a **reflection layer** over the agent's actual working memory. It reads from task lists in `workspace/working/`, syncs with `workspace/state/xp-ledger.json`, and renders an immersive diorama view of ongoing work.
 
-## Customizing the Command Center
-The Command Center can be customized to fit your specific needs. Here are some ways to customize the dashboard:
-* Add or remove projects and tasks as needed
-* Edit the notes section to include custom notes and information
-* Use the settings menu to customize the appearance and behavior of the dashboard
+## How It Works
 
-## Troubleshooting
-If you encounter any issues while using the Command Center, here are some troubleshooting tips:
-* Check the console for error messages
-* Try refreshing the page or restarting the application
-* Contact the developer for assistance if needed
+### Data Flow
+
+```
+workspace/working/*.md (task lists)
+       ↓ (sync-dashboard.ps1)
+workspace/state/xp-ledger.json (canonical state)
+       ↓ (embedded JSON)
+workspace/dashboard/diorama.html (visualization)
+```
+
+- **Task Lists**: Each project has a markdown file in `workspace/working/` with checkboxes (`- [ ] task`, `- [x] done`). The sync script parses these to compute XP, levels, open loops, and momentum.
+- **Ledger**: `xp-ledger.json` tracks project metadata (class, role, XP, level), current tasks, open tasks, and recent events (task completions, level-ups).
+- **Dashboard**: `diorama.html` embeds the ledger JSON and renders a real-time visual display with characters, furniture, and dynamic indicators.
+
+### Running the Sync
+
+Execute the PowerShell script to update the dashboard:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File E:\openclaw\workspace\dashboard\sync-dashboard.ps1
+```
+
+This can be scheduled (e.g., via cron or the agent's heartbeat) to keep the dashboard current.
+
+### Memory Integrity Metric
+
+The dashboard computes a **Signal Drift** score (0–100%) that measures how coherent and up-to-date the workspace is. Factors:
+- Recency of last sync
+- Number of valid working files
+- Project sync coverage
+- Daily journal presence
+
+## Customization
+
+- **Add a new project**: Create a file in `workspace/working/` (e.g., `my-project.md`) with tasks. Then add an entry to `xp-ledger.json` under `projects` (or let the sync script auto-create it on first run).
+- **Change visuals**: Edit `workspace/dashboard/diorama.html`, `diorama.css`, and `diorama.js`. Assets are in `workspace/dashboard/assets/`.
+- **Metrics**: Modify `sync-dashboard.ps1` to adjust XP per task, level thresholds, or drift calculation.
+
+## Architecture Notes
+
+- The dashboard is **read-only** from the agent's perspective. The agent writes to working files and the ledger; the dashboard only displays.
+- All state files in `workspace/state/` are gitignored because they change on every sync.
+- The `.openclaw/` directory (OpenClaw runtime) is intentionally separate and also gitignored.
+
+## Repository Structure
+
+```
+Project-Command-Center/
+├── .gitignore              # excludes state files and secrets
+├── README.md               # this file
+├── workspace/
+│   ├── dashboard/          # front-end visualization
+│   │   ├── diorama.html
+│   │   ├── diorama.css
+│   │   ├── diorama.js
+│   │   ├── index.html
+│   │   ├── styles.css
+│   │   ├── sync-dashboard.ps1
+│   │   └── assets/...
+│   ├── memory/             # daily logs (journal)
+│   ├── working/            # project task lists
+│   └── state/              # generated JSON (gitignored)
+```
+
+## Use with OpenClaw Agents
+
+This Command Center is designed to work with an OpenClaw agent that:
+- Maintains `workspace/working/*.md` task lists
+- Updates `workspace/memory/` daily
+- Can run `sync-dashboard.ps1` periodically (heartbeat or cron)
+
+The agent's identity, memory, and long-term configuration live in `.openclaw/` (not in this repo).
