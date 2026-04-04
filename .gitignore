@@ -66,3 +66,6 @@ memory/
 
 # Doctor dumps
 doctor*.txt
+
+# Project task lists (private)
+workspace/working/
