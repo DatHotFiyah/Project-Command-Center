@@ -1,0 +1,68 @@
+# Secrets, keys, tokens
+routes/
+*.key
+*.secret
+*.env
+
+# OpenClaw internal config containing API keys
+.openclaw/agents/main/agent/auth-profiles.json
+.openclaw/agents/main/agent/models.json
+.openclaw/openclaw.json
+.openclaw/openclaw.json.bak
+.openclaw/openclaw.json.bak.*
+.openclaw/openclaw.json.clobbered.*
+.openclaw/openclaw.json.rescue.bak
+.openclaw/cache/
+.openclaw/identity/
+.openclaw/memory/
+.openclaw/logs/
+.openclaw/cron/
+.openclaw/devices/
+.openclaw/media/
+.openclaw/subagents/
+
+# Session state files
+.openclaw/agents/main/sessions/*.jsonl
+.openclaw/agents/main/sessions/*.lock
+.openclaw/agents/main/sessions/sessions.json
+
+# Runtime state
+.openclaw/workspace-state.json
+.openclaw/update-check.json
+
+# Cosmo baseline (separate repo)
+cosmo-baseline/
+
+# Temp / scratch files
+tmp_*.py
+tmp_*.txt
+*.pyc
+__pycache__/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Zip archives in skills/
+skills/old/
+skills/*.zip
+
+# Dashboard state files that change every sync
+workspace/state/xp-ledger.json
+workspace/state/open-loops.json
+workspace/state/overview.json
+workspace/state/projects.json
+workspace/state/recent-wins.json
+workspace/state/room.json
+workspace/state/xp.json
+
+# Memory logs (keep workspace structure but not raw session memory)
+memory/
+*.jsonl
+
+# Doctor dumps
+doctor*.txt

@@ -1,0 +1,179 @@
+:root {
+  --bg: #07111f;
+  --bg2: #0c1a2f;
+  --card: rgba(14, 24, 42, 0.82);
+  --line: rgba(120, 170, 255, 0.18);
+  --text: #e8f0ff;
+  --muted: #9fb2d9;
+  --accent: #7c5cff;
+  --accent2: #12d6ff;
+  --good: #30e0a1;
+  --warn: #ffb84d;
+  --hot: #ff6b8a;
+  --shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+  background: radial-gradient(circle at top, #13284a 0%, var(--bg) 42%, #030812 100%);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(124, 92, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(18, 214, 255, 0.06) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+  pointer-events: none;
+}
+.shell {
+  width: min(1200px, calc(100% - 32px));
+  margin: 28px auto 40px;
+  position: relative;
+  z-index: 1;
+}
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 22px;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+}
+.glow {
+  box-shadow: 0 0 0 1px rgba(124, 92, 255, 0.15), 0 0 40px rgba(124, 92, 255, 0.15), var(--shadow);
+}
+.kicker {
+  color: var(--accent2);
+  letter-spacing: 0.22em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+h1 {
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 4vw, 3.6rem);
+  line-height: 0.95;
+}
+h2 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+p, li, .status-pill, .footer, .meta { color: var(--muted); }
+.hero-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.orb {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 2.5rem;
+  background: radial-gradient(circle at 30% 30%, #ffffff, #8c70ff 35%, #24113e 70%);
+  box-shadow: 0 0 35px rgba(124, 92, 255, 0.45);
+}
+.status-pill {
+  border: 1px solid rgba(48, 224, 161, 0.35);
+  color: #b7ffe1;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(48, 224, 161, 0.08);
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+}
+.grid {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+}
+.grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid.one { grid-template-columns: 1fr; }
+.list {
+  padding-left: 18px;
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+.stack {
+  display: grid;
+  gap: 12px;
+}
+.item {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(255,255,255,0.02);
+}
+.item h3 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.badge {
+  font-size: 0.72rem;
+  padding: 5px 9px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text);
+}
+.badge.active { background: rgba(18,214,255,0.12); color: #bcf5ff; }
+.badge.strong, .badge.stable, .badge.protected { background: rgba(48,224,161,0.12); color: #b7ffe1; }
+.badge.warn, .badge[ data-tone='warn' ] { background: rgba(255,184,77,0.12); color: #ffe2b2; }
+.badge.hot, .badge[ data-tone='hot' ] { background: rgba(255,107,138,0.12); color: #ffd1db; }
+.mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.tile {
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.tile .label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent2);
+}
+.tile .value {
+  margin-top: 8px;
+  font-size: 1rem;
+  color: var(--text);
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 20px;
+  font-size: 0.85rem;
+}
+@media (max-width: 860px) {
+  .grid.two, .mini-grid { grid-template-columns: 1fr; }
+  .hero { flex-direction: column; align-items: flex-start; }
+  .hero-side { align-items: flex-start; }
+  .footer { flex-direction: column; }
+}

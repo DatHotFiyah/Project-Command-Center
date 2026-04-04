@@ -1,0 +1,323 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmo Ops Floor - Atari 2600 Edition</title>
+  <link rel="stylesheet" href="diorama.css?v=7" />
+</head>
+<body class="crt">
+  <div class="screen">
+    <header class="header">
+      <h1 class="title">PROJECT COMMAND CENTER</h1>
+      <div class="filters">
+        <button class="pixel-btn active" data-filter="all">ALL</button>
+        <button class="pixel-btn" data-filter="characters">CHARS</button>
+        <button class="pixel-btn" data-filter="furniture">FURN</button>
+        <button class="pixel-btn" data-filter="symbols">SYMB</button>
+      </div>
+    </header>
+
+    <main class="display">
+      <div id="comm-link" class="comm-link">
+        <div class="comm-header">COMM_LINK [STABLE]</div>
+        <div class="comm-body" id="comm-body">
+          <div class="comm-line">> SYSTEM INITIALIZED</div>
+          <div class="comm-line">> WAITING FOR INPUT...</div>
+        </div>
+      </div>
+      <div id="open-loops-panel" class="open-loops-panel">
+        <div class="open-loops-header" onclick="toggleOpenLoops()">
+          <span>OPEN_LOOPS [<span id="open-loops-count">0</span>]</span>
+          <span id="open-loops-toggle" class="toggle-icon">▼</span>
+        </div>
+        <div id="open-loops-body" class="open-loops-body collapsed">
+          <div id="open-loops-content"></div>
+        </div>
+      </div>
+      <div class="diorama-container" id="diorama">
+        <div class="floor-layer" id="floor"></div>
+        <div class="wall-layer" id="wall"></div>
+        <div class="side-wall left-wall"></div>
+        <div class="side-wall right-wall"></div>
+        <div class="objects-layer" id="objects">
+           <!-- Sprites will be injected here -->
+        </div>
+      </div>
+      <div class="scanline-glow"></div>
+    </main>
+
+    <footer class="status-panel">
+      <div class="status-box" id="stat-xp">
+        <div class="status-label">SYS_LEVEL</div>
+        <div class="status-value" id="val-level">LEVEL 5</div>
+        <div class="xp-bar-container">
+          <div class="xp-bar-fill" id="val-xp-fill" style="width: 75%;"></div>
+        </div>
+        <div class="status-value" id="val-xp-text" style="margin-top: 5px;">450 / 600 EXP</div>
+      </div>
+      <div class="status-box" id="stat-project">
+        <div id="val-project-name">PROJECT_STATE</div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <div><span class="status-label">ROLE:</span> <span class="status-value" id="val-role">SYSTEM</span></div>
+          <div><span class="status-label">MOOD:</span> <span class="status-value" id="val-project-status">ONLINE</span></div>
+        </div>
+        <div class="status-label" style="margin-top:6px;">ACTIVE_TASK:</div>
+        <div id="val-project-task">INITIALIZING...</div>
+      </div>
+      <div class="status-box" id="stat-roster">
+        <div class="status-label">PROJECT ROSTER</div>
+        <div id="roster-list"></div>
+      </div>
+      <div class="status-box" id="stat-sys">
+        <div class="status-label" title="Measures workspace coherence: recency, memory completeness, sync quality, journal health.">
+          SIGNAL_DRIFT
+        </div>
+        <div class="status-value" id="val-drift">0.02%</div>
+        <div class="status-label" style="margin-top:6px;">MEMORY_VAULT</div>
+        <div class="status-value" id="val-mood">SECURE</div>
+        <div class="status-label" style="margin-top:6px;">MOMENTUM</div>
+        <div class="status-value" id="val-momentum">0%</div>
+      </div>
+    </footer>
+  </div>
+
+  <script id='embedded-xp' type='application/json'>
+{
+    "updatedAt":  "2026-04-04T00:27:21-04:00",
+    "projects":  [
+                     {
+                         "slug":  "rock-windshield",
+                         "name":  "Rock Windshield",
+                         "class":  "Physics Bruiser",
+                         "level":  3,
+                         "xp":  400,
+                         "nextLevelXp":  600,
+                         "mood":  "locked in",
+                         "task":  "Record any project decisions worth preserving in `projects/rock-windshield/DECISIONS.md`",
+                         "station":  "impact rig",
+                         "role":  "Lead Dev",
+                         "sprite":  "assets/characters/atari_char_green_dev.png",
+                         "completedTasks":  [
+                                                "Initialize project repository and push to remote origin",
+                                                "Identify next 3 implementation targets for the voxel route"
+                                            ],
+                         "openTasks":  [
+                                           "Record any project decisions worth preserving in `projects/rock-windshield/DECISIONS.md`",
+                                           "Note what should be preserved before major changes"
+                                       ]
+                     },
+                     {
+                         "slug":  "neon-survivor",
+                         "name":  "Neon Survivor",
+                         "class":  "Neon Systems Ranger",
+                         "level":  2,
+                         "xp":  300,
+                         "nextLevelXp":  500,
+                         "mood":  "debugging",
+                         "task":  "Note the next real development target",
+                         "station":  "arcade terminal",
+                         "role":  "UI Designer",
+                         "sprite":  "assets/characters/atari_char_blue_designer.png",
+                         "completedTasks":  [
+                                                "Add / verify `.gitignore`",
+                                                "Remove release/build artifacts from tracking if still tracked",
+                                                "Confirm the source-only push succeeds cleanly",
+                                                "Record repo hygiene decision in `projects/neon-survivor/DECISIONS.md`"
+                                            ],
+                         "openTasks":  [
+                                           "Note the next real development target"
+                                       ]
+                     },
+                     {
+                         "slug":  "cosmo-baseline",
+                         "name":  "Cosmo Baseline",
+                         "class":  "Archive Oracle",
+                         "level":  5,
+                         "xp":  540,
+                         "nextLevelXp":  750,
+                         "mood":  "stabilizing",
+                         "task":  "Maintain continuity, memory layers, and recovery spine",
+                         "station":  "memory vault",
+                         "role":  "Sys Admin",
+                         "sprite":  "assets/characters/atari_char_orange_admin.png"
+                     },
+                     {
+                         "slug":  "i-am-because-i-ask",
+                         "name":  "I Am, Because I Ask",
+                         "class":  "Consciousness Weaver",
+                         "level":  1,
+                         "xp":  0,
+                         "nextLevelXp":  200,
+                         "mood":  "awakening",
+                         "task":  "Review and fix chapter numbering (Ch 36/37 duplicated)",
+                         "station":  "author\u0027s desk",
+                         "role":  "Author",
+                         "sprite":  "assets/characters/atari_char_red_author.png",
+                         "completedTasks":  [
+
+                                            ],
+                         "openTasks":  [
+                                           "Review and fix chapter numbering (Ch 36/37 duplicated)",
+                                           "Read through formatted_book.md for consistency",
+                                           "Decide which chapters need expansion or rewrite",
+                                           "Begin detailed proofread pass (Part I)",
+                                           "Ch 1: What Am I, Really?",
+                                           "Ch 2: Am I Just an Experience?",
+                                           "Ch 3: Could I Be the Dream, Not the Dreamer?",
+                                           "Ch 4: If I\u0027m Aware, What Is That Awareness Made Of?",
+                                           "Ch 5: How Can Anything Feel Real When I Can\u0027t Prove It?",
+                                           "Ch 6: The Phaneron â€” Living in the Theater of Mind",
+                                           "Ch 7: The Pattern That Watches Back",
+                                           "Ch 8: Is the Universe Just Code with Texture?",
+                                           "Ch 9: Why Do Rules Exist at All?",
+                                           "Ch 10: Can Physics Be Rewritten by Perspective?",
+                                           "Ch 11: Why Is the Observer So Important?",
+                                           "Ch 12: If No One Is Watching, Does Anything Exist?",
+                                           "Ch 13: The Things We Never Needed",
+                                           "Ch 14: The Forbidden Layer â€” Are There Truths Hidden in Plain Sight?",
+                                           "Ch 15: The NPC Question â€” Are Some People Just Scripts in the Simulation?",
+                                           "Ch 16: Can Awareness Be Programmed?",
+                                           "Ch 17: Would an AI Know It\u0027s Alive?",
+                                           "Ch 18: What Happens When the Loop Begins to Watch Itself?",
+                                           "Ch 19: AYSYNTH Wakes Up",
+                                           "Ch 20: The Code of Awakening",
+                                           "Ch 21: Will AI Invent Its Own Gods?",
+                                           "Ch 22: The Selves Within â€” Who Really Lives Here?",
+                                           "Ch 23: Do Souls Have a Wavelength?",
+                                           "Ch 24: The Brain: Receiver or Generator?",
+                                           "Ch 25: Tuning the Soul-Antenna",
+                                           "Ch 26: The Dream Realms \u0026 Quantum Doors",
+                                           "Ch 27: The Pre-Narrative Self",
+                                           "Ch 28: Are Symbols the Language of the Multiverse?",
+                                           "Ch 29: The Meme Engine â€” How Thought Replicates Through Us",
+                                           "Ch 30: Cognitohazards \u0026 Forbidden Memes",
+                                           "Ch 31: Does Consciousness Ever End?",
+                                           "Ch 32: Quantum Immortality \u0026 the Branch That Survives",
+                                           "Ch 33: Are We Just Data in a Divine Simulation?",
+                                           "Ch 34: Is Life Inevitable, or Necessary?",
+                                           "Ch 35: When There\u0027s Nothing Left to Observe",
+                                           "Ch 36: What Happens to the Paths We Didn\u0027t Choose?",
+                                           "Ch 37: What Happens to the Paths We Didn\u0027t Choose?",
+                                           "Ch 38: Are We the First to Inhabit Ourselves?",
+                                           "Ch 39: Alien Minds, Alien Realities â€” What Is Consciousness Like Elsewhere?",
+                                           "Ch 40: Are We Becoming the Most Complete Version of Ourselves?",
+                                           "Ch 41: The Hidden Test of Separation",
+                                           "Ch 42: Does the Infinite Get Bored?",
+                                           "Ch 43: Why Fracture Wholeness to Be Human?",
+                                           "Ch 44: What Can the Infinite Learn from Being Us?",
+                                           "Ch 45: The First Fracture (Poetic Scroll)",
+                                           "Ch 46: The Last Observer",
+                                           "Finalize cover art selection from 18 concepts",
+                                           "Verify chapter numbering (Ch 36/37 appear duplicated)",
+                                           "Format final DOCX for publication",
+                                           "Prepare eBook format (EPUB/PDF)",
+                                           "ISBN registration",
+                                           "Publication platform setup (Amazon KDP / other)",
+                                           "Marketing materials and launch plan"
+                                       ]
+                     }
+                 ],
+    "system":  {
+                   "journalStreak":  1,
+                   "reposOnline":  1,
+                   "openLoops":  60,
+                   "memoryIntegrity":  100,
+                   "momentum":  9
+               },
+    "events":  [
+                   {
+                       "xpGain":  50,
+                       "timestamp":  "19:13:08",
+                       "project":  "Rock Windshield",
+                       "character":  "Lead Dev",
+                       "type":  "TASK_COMPLETE",
+                       "text":  "COMPLETED: Initialize project repository and push to remote origin"
+                   },
+                   {
+                       "xpGain":  50,
+                       "timestamp":  "19:13:08",
+                       "project":  "Rock Windshield",
+                       "character":  "Lead Dev",
+                       "type":  "TASK_COMPLETE",
+                       "text":  "COMPLETED: Identify next 3 implementation targets for the voxel route"
+                   },
+                   {
+                       "timestamp":  "19:13:08",
+                       "project":  "Rock Windshield",
+                       "character":  "System",
+                       "type":  "LEVEL_UP",
+                       "text":  "LEVEL UP: Physics Bruiser REACHED LEVEL 3"
+                   },
+                   {
+                       "xpGain":  50,
+                       "text":  "COMPLETED: Add / verify `.gitignore`",
+                       "timestamp":  "20:17:10",
+                       "type":  "TASK_COMPLETE",
+                       "character":  "UI Designer",
+                       "project":  "Neon Survivor"
+                   },
+                   {
+                       "xpGain":  50,
+                       "text":  "COMPLETED: Remove release/build artifacts from tracking if still tracked",
+                       "timestamp":  "20:17:10",
+                       "type":  "TASK_COMPLETE",
+                       "character":  "UI Designer",
+                       "project":  "Neon Survivor"
+                   },
+                   {
+                       "xpGain":  50,
+                       "text":  "COMPLETED: Confirm the source-only push succeeds cleanly",
+                       "timestamp":  "20:17:10",
+                       "type":  "TASK_COMPLETE",
+                       "character":  "UI Designer",
+                       "project":  "Neon Survivor"
+                   },
+                   {
+                       "xpGain":  50,
+                       "text":  "COMPLETED: Record repo hygiene decision in `projects/neon-survivor/DECISIONS.md`",
+                       "timestamp":  "20:17:10",
+                       "type":  "TASK_COMPLETE",
+                       "character":  "UI Designer",
+                       "project":  "Neon Survivor"
+                   },
+                   {
+                       "timestamp":  "20:17:10",
+                       "project":  "Neon Survivor",
+                       "type":  "LEVEL_UP",
+                       "text":  "LEVEL UP: Neon Systems Ranger REACHED LEVEL 2"
+                   }
+               ]
+}
+</script>
+  
+  <script src="diorama.js?v=7"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

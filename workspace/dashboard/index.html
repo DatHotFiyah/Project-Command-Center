@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Command Center - Atari 2600 Dashboard</title>
+  <link rel="stylesheet" href="diorama.css" />
+</head>
+<body class="crt">
+  <div class="screen">
+    <header class="header">
+      <h1 class="title">PROJECT COMMAND CENTER</h1>
+      <div class="filters">
+        <button class="pixel-btn active" data-filter="all">ALL</button>
+        <button class="pixel-btn" data-filter="characters">CHARS</button>
+        <button class="pixel-btn" data-filter="furniture">FURN</button>
+        <button class="pixel-btn" data-filter="symbols">SYMB</button>
+      </div>
+    </header>
+
+    <main class="display">
+      <div class="diorama-container" id="diorama">
+        <div class="floor-layer" id="floor"></div>
+        <div class="wall-layer" id="wall"></div>
+        <div class="objects-layer" id="objects">
+           <!-- Sprites will be injected here -->
+        </div>
+      </div>
+      <div class="scanline-glow"></div>
+    </main>
+
+    <footer class="status-panel">
+      <div class="status-box">
+        <div class="status-label">SYS_LEVEL</div>
+        <div class="status-value">LEVEL 5</div>
+        <div class="xp-bar-container">
+          <div class="xp-bar-fill" style="width: 75%;"></div>
+        </div>
+        <div class="status-value">450 / 600 EXP</div>
+      </div>
+      <div class="status-box">
+        <div class="status-label">PROJECT_STATE</div>
+        <div class="status-value">ONLINE</div>
+        <div class="status-label">ACTIVE_TASKS</div>
+        <div class="status-value">12 PENDING</div>
+      </div>
+      <div class="status-box">
+        <div class="status-label">SIGNAL_DRIFT</div>
+        <div class="status-value">0.02%</div>
+        <div class="status-label">MEMORY_VALT</div>
+        <div class="status-value">SECURE</div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="diorama.js"></script>
+</body>
+</html>

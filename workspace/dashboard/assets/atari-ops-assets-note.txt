@@ -1,0 +1,1 @@
+Generated Atari-style first-pass asset sheet saved via managed media output. Use the generated image from the prior tool result and place/copy derivatives into the dashboard asset folders as needed.
